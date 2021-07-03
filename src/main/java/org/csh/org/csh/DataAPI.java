@@ -1,9 +1,13 @@
 package org.csh;
 
+import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.csh.models.PlayerData;
+import org.csh.data.dto.PlayerData;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +25,30 @@ public class DataAPI extends JavaPlugin {
                 playerData.setHunger(player.getFoodLevel());
                 playerData.setUsername(player.getName());
 
-                getLogger().info(playerData.toString());
                 data.add(playerData);
             });
-        }, 0, 40);
+
+            if (data.size() > 0) {
+                try {
+                    URL url = new URL("http://localhost:8000/data-callback");
+
+                    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                    con.setRequestMethod("POST");
+                    con.setRequestProperty("Content-Type", "application/json");
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+
+                    new DataOutputStream(con.getOutputStream()) {{
+                        writeBytes(new Gson().toJson(data));
+                        flush();
+                        close();
+                    }};
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 0, 100);
     }
 
     @Override

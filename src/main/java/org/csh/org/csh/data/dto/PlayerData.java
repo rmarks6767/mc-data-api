@@ -1,4 +1,4 @@
-package org.csh.models;
+package org.csh.data.dto;
 
 public class PlayerData {
 
@@ -19,9 +19,9 @@ public class PlayerData {
     public long getHunger() { return hunger; }
     public void setHunger(long hunger) { this.hunger = hunger; }
 
-    @Override
-    public String toString() {
-        return "\nName: " + username + "\nHealth: " + health + "\nArmor: " + armor + "\nHunger: " + hunger;
-    }
+//    @Override
+//    public String toString() {
+//        return "\nName: " + username + "\nHealth: " + health + "\nArmor: " + armor + "\nHunger: " + hunger;
+//    }
 
 }
